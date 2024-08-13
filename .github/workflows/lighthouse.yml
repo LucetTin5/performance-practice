@@ -35,17 +35,12 @@ jobs:
         run: |
           URL="${{ github.event.inputs.url || 'http://localhost:8080' }}"
           lhci autorun --collect.url=$URL --upload.target=filesystem --upload.outputDir=./lhci_reports
-      - name: Upload lighthouse results
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-reports
-          path: ./lhci_reports
       - name: Format and Log Lighthouse score
         id: lhci
         run: |
           RESULT="Lighthouse 성능 측정 결과"
-          if [ -f .lighthouseci/links.json ]; then
-            LATEST_JSON=$(ls -t .lighthouseci/lhr-*.json | head -n1)
+          if [ -f ./lhci_reports/manifest.json ]; then
+            LATEST_JSON=$(ls -t ./lhci_reports/lhr-*.json | head -n1)
             if [ -n "$LATEST_JSON" ]; then
               while IFS=: read -r key score; do
                 score=$(echo "$score" | tr -d ' ')
@@ -59,27 +54,23 @@ jobs:
                 RESULT+=$'\n'"$key: $emoji $score"
               done < <(jq -r '.categories | to_entries[] | "\(.key): \(.value.score * 100 | floor)"' "$LATEST_JSON")
               
-              # Try to extract report URL from links.json
-              REPORT_URL=$(jq -r '.html' .lighthouseci/links.json)
-              
-              # If the above fails, try to construct the URL from the JSON filename
-              if [ "$REPORT_URL" = "null" ] || [ -z "$REPORT_URL" ]; then
-                JSON_FILENAME=$(basename $LATEST_JSON)
-                HTML_FILENAME="${JSON_FILENAME%.json}.html"
-                REPORT_URL="https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/$HTML_FILENAME"
-              fi
-              
-              RESULT+=$'\n\n'"Lighthouse 보고서 전체 보기: $REPORT_URL"
+              RESULT+=$'\n\n'"상세 보고서는 Artifacts에서 확인할 수 있습니다."
             else
-              RESULT+=$'\n'"No JSON report file found in .lighthouseci directory"
+              RESULT+=$'\n'"No JSON report file found in lhci_reports directory"
             fi
           else
-            RESULT+=$'\n'"links.json not found. Unable to process Lighthouse results."
+            RESULT+=$'\n'"manifest.json not found. Unable to process Lighthouse results."
           fi
 
           echo "result<<EOF" >> $GITHUB_OUTPUT
           echo "$RESULT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Upload lighthouse results
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: ./lhci_reports
 
       - name: Get latest commit message
         id: get-commit-message
