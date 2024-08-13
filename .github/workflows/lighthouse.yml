@@ -11,6 +11,10 @@ on:
         required: false
         default: 'http://localhost:8080'
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   lhci:
     name: Lighthouse
@@ -32,14 +36,14 @@ jobs:
           URL="${{ github.event.inputs.url || 'http://localhost:8080' }}"
           lhci autorun --collect.url=$URL
       - name: Format and Log Lighthouse score
+        id: lhci
         run: |
-          echo "Lighthouse 성능 측정 결과"
+          RESULT="Lighthouse 성능 측정 결과"
           if [ -f .lighthouseci/links.json ]; then
             LATEST_JSON=$(ls -t .lighthouseci/lhr-*.json | head -n1)
             if [ -n "$LATEST_JSON" ]; then
-              jq -r '.categories | to_entries[] | "\(.key): \(.value.score * 100 | floor)"' "$LATEST_JSON" | while read line; do
-                key=$(echo "$line" | cut -d':' -f1)
-                score=$(echo "$line" | cut -d':' -f2)
+              while IFS=: read -r key score; do
+                score=$(echo "$score" | tr -d ' ')
                 if (( $(echo "$score >= 90" | bc -l) )); then
                   emoji="🟢"
                 elif (( $(echo "$score >= 50" | bc -l) )); then
@@ -47,8 +51,8 @@ jobs:
                 else
                   emoji="🔴"
                 fi
-                echo "$key: $emoji $score"
-              done
+                RESULT+=$'\n'"$key: $emoji $score"
+              done < <(jq -r '.categories | to_entries[] | "\(.key): \(.value.score * 100 | floor)"' "$LATEST_JSON")
               
               # Try to extract report URL from links.json
               REPORT_URL=$(jq -r '.html' .lighthouseci/links.json)
@@ -60,10 +64,43 @@ jobs:
                 REPORT_URL="https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/$HTML_FILENAME"
               fi
               
-              echo "Lighthouse 보고서 전체 보기: $REPORT_URL"
+              RESULT+=$'\n\n'"Lighthouse 보고서 전체 보기: $REPORT_URL"
             else
-              echo "No JSON report file found in .lighthouseci directory"
+              RESULT+=$'\n'"No JSON report file found in .lighthouseci directory"
             fi
           else
-            echo "links.json not found. Unable to process Lighthouse results."
+            RESULT+=$'\n'"links.json not found. Unable to process Lighthouse results."
           fi
+
+          echo "result<<EOF" >> $GITHUB_OUTPUT
+          echo "$RESULT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Get latest commit message
+        id: get-commit-message
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:%s)
+          COMMIT_MESSAGE="${COMMIT_MESSAGE//'%'/'%25'}"
+          COMMIT_MESSAGE="${COMMIT_MESSAGE//$'\n'/'%0A'}"
+          RESULT="${COMMIT_MESSAGE//$'\r'/'%0D'}"
+          echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+
+      - name: Comment Result on Issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = 1;
+            const commitMessage = `${{ steps.get-commit-message.outputs.message }}`;
+            const lightHouseResult = `${{ steps.lhci.outputs.result }}`;
+
+            const commentBody = `## Lighthouse CI 결과\n\n${commitMessage}\n\n${lightHouseResult}`;
+
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              body: commentBody
+            });
