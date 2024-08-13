@@ -45,7 +45,7 @@ header .logo a {
 }
 
 header .logo .blue-dot {
-  background-color: #33c6dd;
+  background-color: #3360dd;
   width: 10px;
   height: 10px;
   display: inline-block;
@@ -80,7 +80,7 @@ header nav ul li a {
 }
 
 header nav ul li a:hover {
-  color: #33c6dd;
+  color: #3360dd;
 }
 
 header nav ul li:last-of-type a {
@@ -155,7 +155,7 @@ section.hero .hero-image {
   width: 220px;
   max-width: 100%;
   border-radius: 92px;
-  background-color: #33c6dd;
+  background-color: #3360dd;
   color: #fff;
   font-size: 16px;
   font-weight: 700;
@@ -168,9 +168,9 @@ section.hero .hero-image {
 }
 
 .hero-content button:hover {
-  color: #33c6dd;
+  color: #3360dd;
   background-color: #fff;
-  border: 1px solid #33c6dd;
+  border: 1px solid #3360dd;
 }
 
 section.country-bar {
@@ -201,7 +201,7 @@ section.best-sellers h2 {
 
 section.best-sellers hr {
   border: none;
-  border-top: 5px solid #33c6dd;
+  border-top: 5px solid #3360dd;
   width: 66px;
 }
 
@@ -266,7 +266,7 @@ section.best-sellers .product-slider .product .product-info {
 }
 
 section.best-sellers .product-slider .product .product-info .categories {
-  color: #33c6dd;
+  color: #3360dd;
   font-weight: normal;
   font-size: 14px;
   letter-spacing: 0.35px;
@@ -309,7 +309,7 @@ section.best-sellers
   .product-info
   .price
   .original-price {
-  color: #9b9b9b;
+  color: #696969;
   font-weight: normal;
   font-size: 16px;
   letter-spacing: 0.4px;
@@ -332,8 +332,8 @@ section.best-sellers .product-slider .product .product-info button {
 }
 
 section.best-sellers .product-slider .product:hover .product-info button {
-  background-color: #33c6dd;
-  border: 1px solid #33c6dd;
+  background-color: #3360dd;
+  border: 1px solid #3360dd;
   color: white;
 }
 
@@ -433,7 +433,7 @@ footer .bottom-nav ul li a {
 }
 
 footer .bottom-nav ul li a:hover {
-  color: #33c6dd;
+  color: #3360dd;
 }
 
 footer .bottom-nav ul li.list-title {
@@ -662,7 +662,7 @@ footer .copyright-text {
   }
 
   section.best-sellers hr {
-    border-top: 4px solid #33c6dd;
+    border-top: 4px solid #3360dd;
     width: 40px;
   }
 
