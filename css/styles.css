@@ -244,6 +244,12 @@ section.best-sellers .product-slider .product .product-picture {
   align-items: center;
 }
 
+.product-picture img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
 section.best-sellers .product-slider .product.new::before {
   content: 'New';
   background-color: #614dc9;
