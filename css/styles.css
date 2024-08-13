@@ -65,11 +65,11 @@ header nav ul li.menu-icon {
   display: none;
 }
 
-header nav ul li.menu-icon img {
+/* header nav ul li.menu-icon img {
   vertical-align: middle;
   width: 24px;
   height: auto;
-}
+} */
 
 header nav ul li a {
   color: #3e3e3e;
@@ -97,7 +97,7 @@ section.hero .hero-image {
   height: auto;
   filter: brightness(50%);
   display: initial;
-  aspect-ratio: 21 / 9;
+  aspect-ratio: 2.15 / 1;
 }
 
 @media (max-width: 960px) and (min-width: 577px) {
@@ -190,7 +190,7 @@ section.best-sellers {
   padding-top: 80px;
 }
 
-section.best-sellers h1 {
+section.best-sellers h2 {
   text-align: center;
   font-size: 34px;
   letter-spacing: 0.85px;
@@ -478,6 +478,12 @@ footer .copyright-text {
 
   header nav ul li.menu-icon {
     display: inline-block;
+    width: 24px;
+    height: auto;
+  }
+
+  .menu-icon img {
+    object-fit: cover;
   }
 
   .hero-content h1 {
@@ -503,7 +509,7 @@ footer .copyright-text {
     padding-top: 50px;
   }
 
-  section.best-sellers h1 {
+  section.best-sellers h2 {
     font-size: 28px;
     letter-spacing: 0.7px;
     line-height: 38px;
@@ -648,7 +654,7 @@ footer .copyright-text {
     max-width: 360px;
   }
 
-  section.best-sellers h1 {
+  section.best-sellers h2 {
     font-size: 36px;
     letter-spacing: 0.6px;
     line-height: 38px;
