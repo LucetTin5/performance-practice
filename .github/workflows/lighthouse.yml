@@ -40,7 +40,7 @@ jobs:
         run: |
           RESULT="Lighthouse 성능 측정 결과"
           if [ -f ./lhci_reports/manifest.json ]; then
-            LATEST_JSON=$(ls -t ./lhci_reports/lhr-*.json | head -n1)
+            LATEST_JSON=$(ls -t ./lhci_reports/localhost-*.report.json | head -n1)
             if [ -n "$LATEST_JSON" ]; then
               while IFS=: read -r key score; do
                 score=$(echo "$score" | tr -d ' ')
