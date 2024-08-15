@@ -26,16 +26,40 @@
     <script>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
         var f = d.getElementsByTagName(s)[0],
           j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
+          dl = l != "dataLayer" ? "&l=" + l : "";
         j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
         f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', 'GTM-PKK35GL5');
+      })(window, document, "script", "dataLayer", "GTM-PKK35GL5");
     </script>
     <!-- End Google Tag Manager -->
+
+    <!-- Sentry -->
+    <script
+      src="https://js.sentry-cdn.com/11841f5be02ec8245a11af842b076910.min.js"
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script type="text/javascript" defer>
+      function sentryInit() {
+        if (typeof Sentry !== "undefined") {
+          Sentry.init({
+            dsn: "https://68e420b34c77529bb678113bdfd49a1c@o4507781359140864.ingest.de.sentry.io/4507781367595088",
+            // Tracing
+            tracesSampleRate: 0.1,
+            integrations: [Sentry.browserTracingIntegration()],
+          });
+        }
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", sentryInit);
+      } else {
+        sentryInit();
+      }
+    </script>
 
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script
@@ -46,24 +70,24 @@
     ></script>
     <script type="text/javascript" charset="UTF-8" defer>
       function runCookieConsent() {
-        if (typeof cookieconsent !== 'undefined') {
+        if (typeof cookieconsent !== "undefined") {
           cookieconsent.run({
-            notice_banner_type: 'simple',
-            consent_type: 'express',
-            palette: 'light',
-            language: 'en',
-            page_load_consent_levels: ['strictly-necessary'],
+            notice_banner_type: "simple",
+            consent_type: "express",
+            palette: "light",
+            language: "en",
+            page_load_consent_levels: ["strictly-necessary"],
             notice_banner_reject_button_hide: false,
             preferences_center_close_button_hide: false,
             page_refresh_confirmation_buttons: false,
-            website_name: 'Performance Course',
+            website_name: "Performance Course",
           });
         } else {
           setTimeout(runCookieConsent, 200);
         }
       }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', runCookieConsent);
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", runCookieConsent);
       } else {
         runCookieConsent();
       }
